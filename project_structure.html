@@ -1,0 +1,28 @@
+event-logger/                      <- project root (git repo)
+├─ .env                            <- environment variables (local secrets)
+├─ README.md
+├─ requirements.txt
+├─ docker/                          <- (optional later) Dockerfiles & compose
+│  ├─ django.Dockerfile
+│  └─ docker-compose.yml
+├─ deploy/                          <- (optional later) k8s manifests, Jenkinsfile
+│  ├─ k8s-deployment.yaml
+│  └─ Jenkinsfile
+├─ event_logger/                    <- Django project (settings, urls, wsgi)
+│  ├─ __init__.py
+│  ├─ settings.py
+│  ├─ urls.py
+│  └─ asgi.py
+├─ logs_app/                        <- Django app: models, api (producer), consumer
+│  ├─ __init__.py
+│  ├─ admin.py
+│  ├─ apps.py
+│  ├─ models.py                      <- Log model (saved by consumer)
+│  ├─ serializers.py                 <- DRF serializers
+│  ├─ views.py                       <- REST endpoint (produces Kafka messages)
+│  ├─ urls.py
+│  ├─ tests.py
+│  └─ management/
+│     └─ commands/
+│        └─ kafka_consumer.py        <- management command: kafka consumer
+└─ manage.py

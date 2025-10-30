@@ -1,0 +1,13 @@
+# Python
+*.pyc
+__pycache__/
+.env
+.venv/
+venv/
+# Django
+db.sqlite3
+# Docker
+docker-compose.override.yml
+# OS
+Thumbs.db
+"@ | Out-File -Encoding UTF8 .gitignore

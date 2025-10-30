@@ -1,0 +1,23 @@
+Kafka:
+Start Zookeeper:
+cd C:\kafka
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+
+Start Kafka Broker
+cd C:\kafka
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+List all topics
+cd C:\kafka
+.\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
+
+Create a new topic
+cd C:\kafka
+.\bin\windows\kafka-topics.bat --create --topic logs --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+View messages:
+cd C:\kafka
+.\bin\windows\kafka-console-consumer.bat --topic logs --from-beginning --bootstrap-server localhost:9092
+
+
+

@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: event_logger_db
+      MYSQL_ROOT_PASSWORD: ""
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    restart: always
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+
+  django:
+    build: .
+    restart: always
+    depends_on:
+      - db
+      - kafka
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_SECRET_KEY: docker_secret_key
+      DEBUG: "True"
+      DB_NAME: event_logger_db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_HOST: host.docker.internal   # ✅ Connect to XAMPP MySQL on host
+      DB_PORT: 3306
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_TOPIC: logs
+    volumes:
+      - .:/app
+
+  jenkins:
+      image: jenkins/jenkins:lts
+      user: root
+      restart: always
+      ports:
+        - "8080:8080"   # Jenkins UI
+        - "50000:50000" # For Jenkins agents
+      volumes:
+        - ./jenkins_home:/var/jenkins_home
+        - /var/run/docker.sock:/var/run/docker.sock
+  
+
+volumes:
+  db_data:
