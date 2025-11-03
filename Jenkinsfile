@@ -14,36 +14,36 @@ pipeline {
 
     stage('Build images') {
       steps {
-        sh "${DOCKER_COMPOSE} build --pull"
+        bat "${DOCKER_COMPOSE} build --pull"
       }
     }
 
     stage('Start dependencies') {
       steps {
         // Start DB, ZooKeeper, and Kafka first
-        sh "${DOCKER_COMPOSE} up -d db zookeeper kafka"
+        bat "${DOCKER_COMPOSE} up -d db zookeeper kafka"
         // Give them some time to initialize
-        sh "sleep 20"
+        bat "sleep 20"
       }
     }
 
     stage('Run migrations') {
       steps {
-        sh "${DOCKER_COMPOSE} run --rm django python manage.py migrate --noinput"
+        bat "${DOCKER_COMPOSE} run --rm django python manage.py migrate --noinput"
       }
     }
 
     stage('Start application') {
       steps {
         // Now start Django (and optionally Jenkins)
-        sh "${DOCKER_COMPOSE} up -d django jenkins"
+        bat "${DOCKER_COMPOSE} up -d django jenkins"
       }
     }
 
     stage('Smoke test') {
       steps {
         // Check Django service health
-        sh 'curl -f http://localhost:8000/ || echo "API not reachable"'
+        bat 'curl -f http://localhost:8000/ || echo "API not reachable"'
       }
     }
   }
