@@ -38,7 +38,7 @@ pipeline {
     stage('Start application') {
       steps {
         // Now start Django (and optionally Jenkins)
-        bat "${DOCKER_COMPOSE} up -d django jenkins"
+        bat "${DOCKER_COMPOSE} up -d django"
       }
     }
 
