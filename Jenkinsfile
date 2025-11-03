@@ -44,7 +44,8 @@ pipeline {
 
     stage('Smoke test') {
       steps {
-        // Check Django service health
+        echo '⏳ Waiting for Django to become ready...'
+        bat 'powershell -Command "Start-Sleep -Seconds 15"'
         bat 'curl -f http://localhost:8000/ || echo "API not reachable"'
       }
     }
