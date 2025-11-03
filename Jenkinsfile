@@ -24,7 +24,8 @@ pipeline {
         bat "${DOCKER_COMPOSE} up -d db zookeeper kafka"
         // Give them some time to initialize
         // bat "sleep 20"
-        bat 'timeout /t 20 /nobreak'
+        echo '⏳ Waiting for dependencies to initialize...'
+        bat 'powershell -Command "Start-Sleep -Seconds 20"'
       }
     }
 
