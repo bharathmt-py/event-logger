@@ -23,7 +23,8 @@ pipeline {
         // Start DB, ZooKeeper, and Kafka first
         bat "${DOCKER_COMPOSE} up -d db zookeeper kafka"
         // Give them some time to initialize
-        bat "sleep 20"
+        // bat "sleep 20"
+        bat 'timeout /t 20 /nobreak'
       }
     }
 
