@@ -46,7 +46,7 @@ pipeline {
       steps {
         echo '⏳ Waiting for Django to become ready...'
         bat 'powershell -Command "Start-Sleep -Seconds 15"'
-        bat 'curl -f http://127.0.0.1:8000/api/log/ || echo "API not reachable"'
+        bat 'curl -f http://127.0.0.1:8000/api/ || echo "API not reachable"'
       }
     }
   }

@@ -20,6 +20,10 @@ def get_producer():
     )
     return producer
 
+class healthAPIView(APIView):
+    def get(self, request):
+        return Response({"status": "ok"})
+
 class LogProducerAPIView(APIView):
     """
     API endpoint: /api/log/
